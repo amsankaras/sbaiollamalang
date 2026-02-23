@@ -27,26 +27,26 @@
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- LangChain4j -->
+        <!-- Temporarily commented out unresolved dependencies -->
+        <!--
         <dependency>
             <groupId>io.github.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
             <version>1.0.0</version>
         </dependency>
 
-        <!-- Langraph4j -->
         <dependency>
             <groupId>io.github.langraph4j</groupId>
             <artifactId>langraph4j</artifactId>
             <version>1.0.0</version>
         </dependency>
 
-        <!-- Local Ollama Llama -->
         <dependency>
             <groupId>com.ollama</groupId>
             <artifactId>llama</artifactId>
             <version>3.1.0</version>
         </dependency>
+        -->
     </dependencies>
 
     <repositories>
@@ -69,6 +69,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.openrewrite.maven</groupId>
+                <artifactId>rewrite-maven-plugin</artifactId>
+                <version>5.47.3</version>
             </plugin>
         </plugins>
     </build>
