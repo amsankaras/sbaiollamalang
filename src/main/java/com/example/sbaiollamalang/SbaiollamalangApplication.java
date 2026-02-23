@@ -1,0 +1,12 @@
+package com.example.sbaiollamalang;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SbaiollamalangApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SbaiollamalangApplication.class, args);
+    }
+}
