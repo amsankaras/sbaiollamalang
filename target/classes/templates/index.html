@@ -4,9 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
 </head>
 <body>
-    <h1>Welcome to the Spring Boot Application!</h1>
-    <p th:text="${message}"></p>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left Navigation -->
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="position-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <i class="fas fa-home"></i> Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-cogs"></i> Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-8 ms-sm-auto col-lg-9 px-md-4">
+                <header class="d-flex justify-content-between align-items-center py-3 mb-4 border-bottom">
+                    <h1>Welcome to the Spring Boot Application!</h1>
+                </header>
+
+                <div class="content">
+                    <h2>Available Models</h2>
+                    <div id="ollama-models-widget" class="card">
+                        <div class="card-body">
+                            <ul id="models-list" class="list-group">
+                                <!-- Dynamic content will be injected here -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Recommended Section -->
+            <aside class="col-md-2 bg-light">
+                <h5 class="text-center mt-3">Recommended</h5>
+                <ul class="list-group">
+                    <li class="list-group-item">Recommendation 1</li>
+                    <li class="list-group-item">Recommendation 2</li>
+                </ul>
+            </aside>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer mt-auto py-3 bg-light">
+            <div class="container text-center">
+                <span class="text-muted">&copy; 2026 Your Company</span>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Example script to dynamically load models
+        document.addEventListener('DOMContentLoaded', function() {
+            const modelsList = document.getElementById('models-list');
+
+            // Fetch models from the server
+            fetch('/models')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(models => {
+                    // Clear existing content
+                    modelsList.innerHTML = '';
+
+                    // Create a table
+                    const table = document.createElement('table');
+                    table.className = 'table table-striped';
+
+                    // Add table header
+                    const thead = document.createElement('thead');
+                    thead.innerHTML = `
+                        <tr>
+                            <th>Name</th>
+                            <th>Model</th>
+                            <th>Remote Host</th>
+                            <th>Size (MB)</th>
+                            <th>Last Modified</th>
+                        </tr>
+                    `;
+                    table.appendChild(thead);
+
+                    // Add table body
+                    const tbody = document.createElement('tbody');
+                    models.forEach(model => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${model.name || 'N/A'}</td>
+                            <td>${model.model || 'N/A'}</td>
+                            <td>${model.remote_host || 'N/A'}</td>
+                            <td>${model.size ? (model.size / 1024).toFixed(2) : 'N/A'}</td>
+                            <td>${model.modified_at ? new Date(model.modified_at).toLocaleString() : 'N/A'}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                    table.appendChild(tbody);
+
+                    // Append the table to the widget
+                    modelsList.appendChild(table);
+                })
+                .catch(error => {
+                    const errorItem = document.createElement('div');
+                    errorItem.className = 'alert alert-danger';
+                    errorItem.textContent = `Error: ${error.message}`;
+                    modelsList.appendChild(errorItem);
+                });
+        });
+    </script>
 </body>
 </html>

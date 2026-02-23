@@ -3,8 +3,13 @@ package com.sankar.sbaiollamalang;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class UiController {
@@ -32,5 +37,28 @@ public class UiController {
             model.addAttribute("message", "Error checking Ollama status: " + e.getMessage());
         }
         return "index";
+    }
+
+    @GetMapping("/models")
+    @ResponseBody
+    public List<String> getModels() {
+        List<String> models = new ArrayList<>();
+        try {
+            URL url = new URL("http://localhost:11434/api/tags"); // Replace with actual Ollama endpoint
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            if (connection.getResponseCode() == 200) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        models.add(line);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            models.add("Error fetching models: " + e.getMessage());
+        }
+        return models;
     }
 }
